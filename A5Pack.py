@@ -5,7 +5,7 @@ import argparse
 class A5Pack:
     HDR_FMT = "<6s3s82x"
     HDR_SIZE = calcsize(HDR_FMT)
-    INFO_CHUNK_FMT = "<20x20sI"
+    INFO_CHUNK_FMT = "<20s20sI"
     INFO_CHUNK_SIZE = calcsize(INFO_CHUNK_FMT)
 
     def __init__(self, buf):
@@ -28,16 +28,16 @@ class A5Pack:
 
     def _get_file(self):
         try:
-            tag, size = self._read_entry(self.offs_next_info_chunk)
+            ver, tag, size = self._read_entry(self.offs_next_info_chunk)
         except ValueError:
             return None
             
         offs = self.offs_next_info_chunk + A5Pack.INFO_CHUNK_SIZE
         self.offs_next_info_chunk = offs + size
-        return tag, offs, size
+        return ver, tag, offs, size
 
     def _read_entry(self, offs):
-        """returns tuple: tag, size"""
+        """returns tuple: ver, tag, size"""
         if len(self.buf) < offs+A5Pack.INFO_CHUNK_SIZE:
             raise ValueError()
         return unpack(A5Pack.INFO_CHUNK_FMT, self.buf[offs:offs+A5Pack.INFO_CHUNK_SIZE] )
@@ -55,8 +55,11 @@ a5 = A5Pack(buf)
 r = a5.get_first_file()
 if r:
     file_idx = 0
-    tag, offs, size = r
-    name = "file%02d_%s" % (file_idx, tag.decode("utf-8").strip("\x00"))
+    ver, tag, offs, size = r
+    name = "%s_%d_%08x_%s" % (ver.decode("utf-8").strip("\x00"),
+                            file_idx,
+                            offs,
+                            tag.decode("utf-8").strip("\x00").replace(" ", "_"))
     print("%s 0x%x %d" % (name, offs, size))
     f = open(name, "wb")
     f.write(a5.extract_file(offs, size))
@@ -65,8 +68,11 @@ if r:
         r = a5.get_next_file()
         if r:
             file_idx += 1
-            tag, offs, size = r
-            name = "file%02d_%s" % (file_idx, tag.decode("utf-8").strip("\x00"))
+            ver, tag, offs, size = r
+            name = "%s_%d_%08x_%s" % (ver.decode("utf-8").strip("\x00"),
+                                    file_idx,
+                                    offs,
+                                    tag.decode("utf-8").strip("\x00").replace(" ", "_"))
             print("%s 0x%x %d" % (name, offs, size))
             f = open(name, "wb")
             f.write(a5.extract_file(offs, size))
