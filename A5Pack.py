@@ -16,16 +16,36 @@ class A5Pack:
     INFO_CHUNK_SIZE = calcsize(INFO_CHUNK_FMT)
     HDR_MAGIC = b"A5Pack"
     VALID_CHUNKS = { # Flash dst addr, max valid size
-        "A5 code":(0x40020000, 0x132000),
+        "A5 code":(0x40020000, 0x200000),
         "A5 voice":(0x40200000, 0x5000000),
         "A5 Reserve1":(0x479C0000, 0x100000),
         "A5 Reserve2":(0x47AC0000, 0x100000),
         "A5 Reserve3":(0x47BC0000, 0x100000),
+        "A5 selfcheck":(0x47CC0000, 0x132000),
+        "A5 system":(0x47E00000, 0x20000),
         "A5 patch":(0x47F00000, 0x0A5400),
         "A5 patch(5)":(0x47E80000, 0x14A800),
-        "stm32 code":(0x8010000, 0x70000),
+        "stm32 code":(0x8010000, 0x100000),
+        "gd32 code":(0x8010000, 0x100000),
         "stm32F030 code":(0x8002800, 0x0D800),
-        "Z-A5 bootloader":(0x40000000, 0x20000)
+        "gdf32F030 code":(0x8002800, 0x0D800),
+        "Z-A5 bootloader":(0x40000000, 0x20000),
+        "A5_s code":(0x40020000, 0x132000),
+        "A5_s voice":(0x40200000, 0x5000000),
+        "A5_s Reserve1":(0x479C0000, 0x100000),
+        "A5_s Reserve2":(0x47AC0000, 0x100000),
+        "A5_s selfcheck":(0x47CC0000, 0x132000),
+        "Z-A5_s bootloader":(0x40000000, 0x20000),
+        "A5_3m Reserve1":(0x42600000, 0x100000),
+        "A5_3m Reserve2":(0x42700000, 0x100000),
+        "A5_3m Reserve3":(0x42800000, 0x100000),
+        "A5_3m selfcheck":(0x42900000, 0x132000),
+        "A5_3m system":(0x42A40000, 0x20000),
+        "A5_3m patch":(0x42200000, 0x200000),
+        "A5_7x patch":(0x472C0000, 0x300000),
+        "A5_7x multi patch":(0x401E0000, 0x20000),
+        "A5_7x lower patch":(0x475C0000, 0x200000),
+        "A5_7x upper patch":(0x477C0000, 0x200000)
     }
 
     def __init__(self, buf):
