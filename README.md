@@ -2,6 +2,6 @@
 
 ![pwned](./rsrc/pwned.jpg)
 
-segamI erawmriF htnysardyH MSA rof rekcapnU
+Firmware unpacker for the Hydrasynth Synthesizer by Ashun Sound Machines / ASM.
 
 DISCLAIMER: USE AT YOUR OWN RISK!
